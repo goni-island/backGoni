@@ -1,8 +1,55 @@
 //   node --inspect-brk index.js //to debug  
 const express= require('express');
 const router = express.Router();
+const Employee = require('../models/employees')
+
+// -> router 때문에
+// =  localhost:4000/employees 
+router.get('/',function(req,res,next){
+ Employee.findAll()
+ .then (employee =>res.status(200).json(employee))
+ .catch(err => next(err));
+});
+
+  
+router.get('/:id',function(req,res,next){
+    // console.log(req.params.employees);
+    Employee.findOne({
+      where:{
+        id:req.params.id
+      }
+    })
+    .then (employee => res.status(200).json(employee))
+    .catch(err => next(err));
+});
+
+router.post('/', function(req,res,next){
+  Employee.create(req.body)
+  .then(factor => {
+    res.status(200).json(factor)})
+  .catch(err=>next(err));
+})
+
+router.delete('/:id',function(req,res){
+  Employee.destroy({
+    where:{
+      id:req.params.id
+    }
+  });
+  res.status(200).json("DELETED WELL");
+})
 
 
+router.put('/:id', function(req,res){
+  Employee.update(req.body,{
+    where:{
+      id:req.params.id
+    } 
+  })
+  .then (factor =>{
+    res.status(200).json(factor)})
+  .catch(err=>next(err));
+  //?
 // function AuthenticatorResponse(req,res,next){
 //     if(req.session){
 //       if(req.session.id){
@@ -23,18 +70,6 @@ const router = express.Router();
 //     res.send('=TEST=');
     
 //     })
-    
 
-// -> router 때문에
-// =  localhost:4000/employees 
-router.get('/',(req,res)=>{
-  
-    res.send('+++ ALL EMP +++')
-  });
-  
-  router.get('/:id',(req,res)=>{
-    // console.log(req.params.employees);
-    res.send('EMP');
-  })
-
+});
   module.exports=router;
