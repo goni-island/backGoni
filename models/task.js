@@ -4,18 +4,17 @@ const connect = require('../controll/connectdb');
 
 const Task = connect.define("task", {
 
-  task: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-
   description: {
     type: DataTypes.STRING,
     allowNull: false
   },
-
-  status: {
-    type: DataTypes.BOOLEAN,
+  prioritylevel: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  
+  completion: {
+    type: DataTypes.STRING,
     allowNull: false
   }
 

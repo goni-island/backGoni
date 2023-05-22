@@ -11,19 +11,33 @@ const seedDB = async () =>{
     const Data = await Employee.create({
         firstname : "Saewoo",
         lastname: "ChoiPark",
-        department : "CAT"
+        department : "CAT",
     });
+    const DataThree = await Employee.create({
+        firstname : "Rina",
+        lastname: "Park",
+        department : "ART"
+    });
+
     console.log('--------CHECK----------');
     console.log(Data instanceof Employee); //true
 
     const DataTwo = await Task.create({
-        task : 'PROJECT',
-        description: 'NOT WORKING WHY...',
-        status : false
+        description: 'Eat Breakfast',
+        prioritylevel : 1,
+        completion : 'NOT DONE'
+    });
+    
+    const DataFour = await Task.create({
+        description: 'Client Meeting',
+        prioritylevel : 3,
+        completion : 'DONE'
+        // employeeId : 1,
     });
     console.log('--------CHECK----------');
     console.log(DataTwo instanceof Task); //true
-   
+    await DataFour.setEmployee(Data);
+    await DataTwo.setEmployee(Data);
 }
 
 module.exports = seedDB;

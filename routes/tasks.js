@@ -1,23 +1,34 @@
 const express= require('express');
 const router = express.Router();
-const Task =require('../models/task')
+const {Employee,Task} = require('../models')
 
 // router.get('/',(req,res)=>{
 //     res.send('+++ ALL Task +++');
 //   });
   
   router.get('/', function(req,res,next){
-    Task.findAll()
+    Task.findAll({include:["employee"]})
     .then (task =>res.status(200).json(task))
     .catch(err => next(err));
    });
+  // router.get('/', function(req,res,next){
+  //   Task.findAll({
+  //     include:[{
+  //       model:Employee,
+  //       where:{taskId :Sequelize.col('task.id')}
+  //     }]
+  //   })
+  //   .then (task =>res.status(200).json(task))
+  //   .catch(err => next(err));
+  //  });
 
 
    router.get('/:id',function(req,res,next){
        Task.findOne({
          where:{
            id:req.params.id
-         }
+         },
+         include:["employee"]
        })
        .then (task => res.status(200).json(task))
        .catch(err => next(err));
@@ -31,10 +42,10 @@ const Task =require('../models/task')
    })
    
    router.delete('/:id',function(req,res){
-     Task.destroy({
+     Task.destroy({ 
        where:{
          id:req.params.id
-       }
+       },
      });
      res.status(200).json("DELETED WELL");
    })
