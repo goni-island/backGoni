@@ -1,12 +1,12 @@
 //   node --inspect-brk index.js //to debug  
 const express= require('express');
 const router = express.Router();
-const Employee = require('../models/employees')
+const {Employee,Task} = require('../models')
 
 // -> router 때문에
 // =  localhost:4000/employees 
 router.get('/',function(req,res,next){
- Employee.findAll()
+ Employee.findAll({include:["task"]})
  .then (employee =>res.status(200).json(employee))
  .catch(err => next(err));
 });
@@ -17,7 +17,8 @@ router.get('/:id',function(req,res,next){
     Employee.findOne({
       where:{
         id:req.params.id
-      }
+      },
+      include:["task"]
     })
     .then (employee => res.status(200).json(employee))
     .catch(err => next(err));
